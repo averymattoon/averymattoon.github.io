@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Avery Mattoon</title>
+<meta name="description" content="Avery Mattoon: economics and computer science. Data pipelines, economic research, and public dashboards.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one left-aligned reading column; each project is a "research note" with a real figure drawn to scale. */
+:root {
+  --paper: #f6f7f9;
+  --ink: #18212d;
+  --ink-soft: #4a5566;
+  --rule: #d6dbe3;
+  --accent: #1f4f8a;       /* corrected / current values */
+  --before: #b4553f;       /* the error, the "before" state */
+  --chip: #e8edf4;
+  --display: "Libre Baskerville", Baskerville, "Baskerville Old Face", Georgia, serif;
+  --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #11161d; --ink: #e4e8ee; --ink-soft: #9aa5b5; --rule: #2a3340;
+    --accent: #8db6ec; --before: #e08a72; --chip: #1b2330; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #11161d; --ink: #e4e8ee; --ink-soft: #9aa5b5; --rule: #2a3340;
+  --accent: #8db6ec; --before: #e08a72; --chip: #1b2330; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 46rem; margin: 0 auto; padding-block: 4.5rem 3rem; display: grid; gap: 4rem; }
+a { color: var(--accent); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+h1, h2, h3 { font-family: var(--display); font-weight: 700; line-height: 1.1; text-wrap: balance; margin: 0; }
+.label {
+  font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-soft); margin: 0;
+}
+
+/* Intro */
+.intro { display: grid; gap: 1.25rem; }
+.intro h1 { font-size: clamp(2.4rem, 7.5vw, 3.9rem); letter-spacing: -0.015em; }
+.thesis { font-size: clamp(1.2rem, 3vw, 1.45rem); line-height: 1.45; max-width: 36rem; margin: 0; }
+.facts { display: flex; flex-wrap: wrap; gap: 0.4rem 1.25rem; font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft); margin: 0; padding: 0; list-style: none; }
+.links { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; margin-top: 0.25rem; }
+.btn {
+  font-family: var(--mono); font-size: 0.85rem; text-decoration: none;
+  border: 1px solid var(--rule); border-radius: 6px; padding: 0.45rem 0.8rem; color: var(--ink);
+  background: transparent; cursor: pointer; line-height: 1.2;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.btn.primary:hover { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+.email { font-family: var(--mono); font-size: 0.85rem; color: var(--ink-soft); user-select: all; }
+
+/* Sections */
+section { display: grid; gap: 2rem; }
+.section-head { display: grid; gap: 0.35rem; border-top: 1px solid var(--rule); padding-top: 1.25rem; }
+.section-head h2 { font-size: 1.6rem; }
+
+/* Projects */
+.project { display: grid; gap: 0.9rem; }
+.project h3 { font-size: 1.35rem; }
+.project p { margin: 0; max-width: 40rem; }
+.meta { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0; padding: 0; list-style: none; }
+.meta li { font-family: var(--mono); font-size: 0.75rem; background: var(--chip); border-radius: 4px; padding: 0.15rem 0.5rem; color: var(--ink-soft); }
+.project .links { margin-top: 0.15rem; }
+
+figure { margin: 0.4rem 0 0; display: grid; gap: 0.5rem; }
+figcaption { font-family: var(--mono); font-size: 0.78rem; color: var(--ink-soft); line-height: 1.5; }
+figcaption b { font-weight: 500; color: var(--ink); }
+.chart { overflow-x: auto; }
+.chart svg { display: block; width: 100%; min-width: 22rem; height: auto; font-family: var(--mono); }
+.legend { display: flex; flex-wrap: wrap; gap: 1rem; font-family: var(--mono); font-size: 0.78rem; color: var(--ink-soft); }
+.key { display: inline-flex; align-items: center; gap: 0.4rem; }
+.dot { width: 0.65rem; height: 0.65rem; border-radius: 50%; display: inline-block; }
+.dot.before { border: 2px solid var(--before); }
+.dot.after { background: var(--accent); }
+
+.svg-axis { stroke: var(--rule); }
+.svg-zero { stroke: var(--ink-soft); stroke-dasharray: 3 3; }
+.svg-tick { fill: var(--ink-soft); font-size: 11px; }
+.svg-state { fill: var(--ink); font-size: 12px; }
+.svg-link { stroke: var(--rule); stroke-width: 2; }
+.svg-before { fill: var(--paper); stroke: var(--before); stroke-width: 2; }
+.svg-after { fill: var(--accent); }
+.svg-val { font-size: 11px; }
+.svg-val.b { fill: var(--before); }
+.svg-val.a { fill: var(--accent); }
+
+/* R² comparison */
+.compare { display: grid; gap: 0.6rem; }
+.bar-row { display: grid; grid-template-columns: minmax(9rem, 14rem) 1fr 3.2rem; align-items: center; gap: 0.75rem; font-family: var(--mono); font-size: 0.8rem; }
+.bar-row span:first-child { color: var(--ink-soft); min-width: 0; }
+.bar-track { height: 0.8rem; background: var(--chip); border-radius: 2px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--accent); }
+.bar-row .v { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* Experience */
+.roles { display: grid; gap: 1.5rem; margin: 0; padding: 0; list-style: none; }
+.role { display: grid; grid-template-columns: 9.5rem 1fr; gap: 0.25rem 1.5rem; }
+.role .when { font-family: var(--mono); font-size: 0.8rem; color: var(--ink-soft); padding-top: 0.2rem; font-variant-numeric: tabular-nums; }
+.role h3 { font-size: 1.1rem; }
+.role .title { font-style: italic; color: var(--ink-soft); margin: 0.1rem 0 0.35rem; }
+.role p { margin: 0; }
+.role > div { min-width: 0; }
+
+footer { border-top: 1px solid var(--rule); padding-top: 1.25rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.75rem; font-family: var(--mono); font-size: 0.8rem; color: var(--ink-soft); }
+
+@media (max-width: 560px) {
+  .wrap { padding-block: 3rem 2rem; gap: 3rem; }
+  .role { grid-template-columns: 1fr; }
+  .bar-row { grid-template-columns: 1fr 3rem; }
+  .bar-row span:first-child { grid-column: 1 / -1; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .svg-after, .svg-link { transition: opacity 0.2s; }
+}
+</style>
+
+</head>
+<body>
+<main class="wrap">
+
+  <header class="intro">
+    <p class="label">Economics &amp; Computer Science</p>
+    <h1>Avery Mattoon</h1>
+    <p class="thesis">I build data pipelines that turn messy public records into economic evidence, from central bank filings to 7.4 million visa applications.</p>
+    <ul class="facts">
+      <li>M.S. Computer Science, Emory</li>
+      <li>Available May 2027</li>
+      <li>New York, NY</li>
+    </ul>
+    <div class="links">
+      <a class="btn primary" href="Avery_Mattoon_Resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
+      <a class="btn" href="https://github.com/averymattoon" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="https://www.linkedin.com/in/averymattoon/" target="_blank" rel="noopener">LinkedIn</a>
+      <button class="btn" id="copy-email" type="button">Copy email</button>
+      <span class="email" id="email">averyrmattoon@gmail.com</span>
+    </div>
+  </header>
+
+  <section aria-labelledby="work">
+    <div class="section-head">
+      <p class="label">Selected work</p>
+      <h2 id="work">Projects</h2>
+    </div>
+
+    <article class="project">
+      <h3>H-1B Economic Impact Dashboard</h3>
+      <ul class="meta"><li>2025–2026</li><li>PostgreSQL</li><li>Python</li><li>Next.js</li></ul>
+      <p>A public dashboard of every certified H-1B application from FY2009 to FY2024, 7.4 million in all, built from sixteen years of Department of Labor files that change format almost every year. It maps where H-1B demand concentrates by state, industry and employer, tracks the COVID-era drop, and stress-tests a $100,000 per-filing fee: at FY2024 volume that is up to $51 billion a year, with IT services carrying at least 37% of it.</p>
+      <p>The most useful finding was a bug. The state chart showed Oregon's filings up 162% during COVID. Tracing it led to one column renamed in the FY2019 file, which had silently recorded 301,000 applications, 52% of the year, at the employer's headquarters instead of the worksite. National totals looked normal, which is why it was easy to miss.</p>
+      <figure>
+        <div class="legend" aria-hidden="true">
+          <span class="key"><span class="dot before"></span>Before the fix</span>
+          <span class="key"><span class="dot after"></span>After the fix</span>
+        </div>
+        <div class="chart">
+          <svg viewBox="0 0 560 204" role="img" aria-label="Change in H-1B applications from FY2019 to FY2020, before and after the worksite fix. Oregon: plus 162 percent before, minus 9.9 percent after. Arizona: plus 131 before, minus 7.0 after. New Jersey: minus 59.6 before, minus 14.6 after. Maryland: minus 53.4 before, minus 7.4 after. Texas: minus 39.4 before, minus 6.1 after.">
+            <!-- x(v) = 120 + 1.75 * (v + 70), domain -70..170 -->
+            <line class="svg-axis" x1="120" y1="172" x2="540" y2="172"/>
+            <line class="svg-zero" x1="242.5" y1="14" x2="242.5" y2="172"/>
+            <g class="svg-tick" text-anchor="middle">
+              <text x="155" y="190">−50%</text>
+              <text x="242.5" y="190">0</text>
+              <text x="330" y="190">+50%</text>
+              <text x="417.5" y="190">+100%</text>
+              <text x="505" y="190">+150%</text>
+            </g>
+            <g class="svg-state" text-anchor="end">
+              <text x="108" y="34">Oregon</text>
+              <text x="108" y="64">Arizona</text>
+              <text x="108" y="94">New Jersey</text>
+              <text x="108" y="124">Maryland</text>
+              <text x="108" y="154">Texas</text>
+            </g>
+            <g>
+              <line class="svg-link" x1="225.2" y1="30" x2="526.4" y2="30"/>
+              <line class="svg-link" x1="230.2" y1="60" x2="472.0" y2="60"/>
+              <line class="svg-link" x1="138.1" y1="90" x2="216.9" y2="90"/>
+              <line class="svg-link" x1="149.1" y1="120" x2="229.6" y2="120"/>
+              <line class="svg-link" x1="173.5" y1="150" x2="231.9" y2="150"/>
+            </g>
+            <g>
+              <circle class="svg-before" cx="526.4" cy="30" r="5"/>
+              <circle class="svg-before" cx="472.0" cy="60" r="5"/>
+              <circle class="svg-before" cx="138.1" cy="90" r="5"/>
+              <circle class="svg-before" cx="149.1" cy="120" r="5"/>
+              <circle class="svg-before" cx="173.5" cy="150" r="5"/>
+              <circle class="svg-after" cx="225.2" cy="30" r="5"/>
+              <circle class="svg-after" cx="230.2" cy="60" r="5"/>
+              <circle class="svg-after" cx="216.9" cy="90" r="5"/>
+              <circle class="svg-after" cx="229.6" cy="120" r="5"/>
+              <circle class="svg-after" cx="231.9" cy="150" r="5"/>
+            </g>
+            <g>
+              <text class="svg-val b" x="518" y="20" text-anchor="end">+162%</text>
+              <text class="svg-val a" x="225.2" y="20" text-anchor="end">−9.9%</text>
+              <text class="svg-val b" x="464" y="50" text-anchor="end">+131%</text>
+            </g>
+          </svg>
+        </div>
+        <figcaption><b>Figure 1.</b> Change in certified H-1B applications, FY2019 to FY2020, for the five states the bug distorted most. The national figure, −7.7%, was unaffected.</figcaption>
+      </figure>
+      <div class="links">
+        <a class="btn primary" href="https://h1-b-economic-impact-dashboard.vercel.app" target="_blank" rel="noopener">Open the dashboard</a>
+        <a class="btn" href="https://github.com/averymattoon/H1-B-Economic-Impact-Dashboard" target="_blank" rel="noopener">Code and methodology</a>
+      </div>
+    </article>
+
+    <article class="project">
+      <h3>Era Bias in Music Popularity Prediction</h3>
+      <ul class="meta"><li>2025</li><li>Python</li><li>scikit-learn</li><li>with Leila Buchan</li></ul>
+      <p>Can a model that predicts a song's popularity from its audio features treat music from every era fairly? Across 580,000 Spotify tracks released from 1921 to 2020, a model trained on one era did worse than simply guessing the average in 19 of 20 tests on other eras.</p>
+      <p>The pooled model looked better, with an R² of 0.34. But a baseline that knows nothing about the audio and only predicts each era's average popularity scores 0.339. Nearly all of the model's accuracy came from recognizing when a song was recorded, which matters for any recommender trained mostly on recent music.</p>
+      <figure>
+        <div class="compare" role="img" aria-label="Held-out R squared: Random Forest with nine audio features 0.340; era average only 0.339.">
+          <div class="bar-row"><span>Random Forest, 9 audio features</span><div class="bar-track"><div class="bar-fill" style="width: 68%"></div></div><span class="v">0.340</span></div>
+          <div class="bar-row"><span>Era average only</span><div class="bar-track"><div class="bar-fill" style="width: 67.8%"></div></div><span class="v">0.339</span></div>
+        </div>
+        <figcaption><b>Figure 2.</b> Held-out R² on all eras pooled (scale 0 to 0.5). The audio features add almost nothing beyond knowing the era.</figcaption>
+      </figure>
+      <div class="links">
+        <a class="btn" href="https://github.com/averymattoon/Spotify-Era-Popularity-Score-Prediction" target="_blank" rel="noopener">Code and results</a>
+      </div>
+    </article>
+
+    <article class="project">
+      <h3>Sentiment in Peruvian Corporate Filings</h3>
+      <ul class="meta"><li>Summer 2025</li><li>Python</li><li>Selenium</li><li>OCR</li><li>Central Reserve Bank of Peru</li></ul>
+      <p>Built at the Central Reserve Bank of Peru to test whether the tone of corporate annual reports can serve as a leading indicator of GDP. A scraper collected up to 25 years of reports for 266 firms, replacing more than 440 hours of manual collection; OCR digitized the roughly 30% that were scanned; and a custom Spanish financial dictionary scored their sentiment.</p>
+      <p>Most of the filings proved too formulaic to carry signal, so the analysis moved to executive summaries and CEO letters. Bank CEO-letter sentiment tracked same-year growth (r ≈ 0.5, 2000–2024), a coincident signal rather than a leading one. The pipeline and documentation were handed off to the team for further work.</p>
+    </article>
+  </section>
+
+  <section aria-labelledby="exp">
+    <div class="section-head">
+      <p class="label">Experience</p>
+      <h2 id="exp">Where I've worked</h2>
+    </div>
+    <ul class="roles">
+      <li class="role">
+        <span class="when">Jan 2026 – now</span>
+        <div>
+          <h3>Emory University</h3>
+          <p class="title">Instructor, DATASCI 100 Lab</p>
+          <p>Teach R-based statistics and data analysis lab sections for an introductory course of 160 students, and manage four teaching assistants.</p>
+        </div>
+      </li>
+      <li class="role">
+        <span class="when">Jun – Aug 2025</span>
+        <div>
+          <h3>Central Reserve Bank of Peru</h3>
+          <p class="title">Research Assistant, Macroeconomic Modeling</p>
+          <p>Built the filing-sentiment pipeline above for the bank's economic research team in Lima.</p>
+        </div>
+      </li>
+      <li class="role">
+        <span class="when">May – Aug 2024</span>
+        <div>
+          <h3>Waters Corporation</h3>
+          <p class="title">Investor Relations &amp; Treasury Intern</p>
+          <p>Modeled 14 cross-currency swaps ($550M+) in Bloomberg and built a live valuation dashboard for the treasury team; automated data collection for a ~$3.5B global insurance renewal.</p>
+        </div>
+      </li>
+      <li class="role">
+        <span class="when">2022 – 2027</span>
+        <div>
+          <h3>Emory University</h3>
+          <p class="title">B.A. Economics and Computer Science, Spanish minor (2026); M.S. Computer Science (2027)</p>
+          <p>Coursework in econometrics, machine learning, NLP and database systems. Terms abroad in Salamanca and Copenhagen; professional working proficiency in Spanish.</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <footer>
+    <span>Avery Mattoon</span>
+    <span>Last updated November 2026</span>
+  </footer>
+</main>
+
+<script>
+(function () {
+  var btn = document.getElementById('copy-email');
+  var email = document.getElementById('email');
+  if (!btn || !email) return;
+  btn.addEventListener('click', function () {
+    var text = email.textContent.trim();
+    function selectIt() {
+      var r = document.createRange(); r.selectNodeContents(email);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      btn.textContent = 'Press Ctrl/Cmd+C';
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        btn.textContent = 'Copied';
+        setTimeout(function () { btn.textContent = 'Copy email'; }, 1800);
+      }, selectIt);
+    } else { selectIt(); }
+  });
+})();
+</script>
+</body>
+</html>
